@@ -165,11 +165,11 @@ jobs:
     steps:
     - name: Prepare message
       run: |
-        echo "MESSAGE= *Деплой Kittygram успешно выполнен!*%0A%0A*Разработчик:* @${{ github.actor }}%0A*Коммит:* [${{ github.event.commits[0].message }}](${GITHUB_SERVER_URL}/${{ github.repository }}/commit/${{ github.sha }})" >> $GITHUB_ENV
+        echo "MESSAGE= *Деплой Kittygram успешно выполнен!*%0A%0A*Разработчик:* @${{ github.actor }}%0A*Коммит:* [${{ github.event.commits[0].message }}]($GITHUB_SERVER_URL/${{ github.repository }}/commit/${{ github.sha }})" >> $GITHUB_ENV
     - name: Send message
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: ${{ env.MESSAGE }}
-        format: Markdown
+        format: markdown
