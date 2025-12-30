@@ -169,4 +169,4 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: ${{ env.MESSAGE }}
-          parse_mode: Markdown
+          format: Markdown
