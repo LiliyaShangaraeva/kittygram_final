@@ -1,26 +1,93 @@
-#  Как работать с репозиторием финального задания
+[![Main Kittygram workflow](https://github.com/LiliyaShangaraeva/kittygram_final/actions/workflows/main.yml/badge.svg)](https://github.com/LiliyaShangaraeva/kittygram_final/actions/workflows/main.yml)
+# 🐱 KittyGram — Альбом, в котором можно хранить фотографии котиков.
 
-## Что нужно сделать
+## 🌟 Описание проекта
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
+KittyGram — это **сеть для владельцев котов**, где можно:
 
-## Как проверить работу с помощью автотестов
+- агружать фото своих котиков.
+- Записывать их достижения.
 
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (https://доменное_имя) на ваш проект Kittygram
-taski_domain: полная ссылка (https://доменное_имя) на ваш проект Taski
-dockerhub_username: ваш_логин_на_докерхабе
+---
+
+## 🛠️ Технологический стек
+
+| Компонент       | Технология               |
+|------------------|--------------------------|
+| Backend          | Python + Django + DRF    |
+| Frontend         | React + Vite             |
+| База данных      | PostgreSQL               |
+| Сервер           | Nginx + Gunicorn         |
+| Контейнеризация  | Docker + Docker Compose  |
+| CI/CD            | GitHub Actions           |
+| Хостинг          | Yandex Cloud             |
+
+---
+
+
+## Как развернуть проект
+
+### 1. Клонируйте репозиторий
+
+```bash
+git clone https://github.com/LiliyaShangaraeva/kittygram_final.git
+cd kittygram_final
 ```
 
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
+### 2. Создайте файл .env
 
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
+Скопируйте шаблон:
 
-## Чек-лист для проверки перед отправкой задания
+```bash
+cp .env.example .env
+```
 
-- Проект Taski доступен по доменному имени, указанному в `tests.yml`.
-- Проект Kittygram доступен по доменному имени, указанному в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+Пример файла .env — замените значения на свои!
+
+```bash
+POSTGRES_DB=your_db_name
+POSTGRES_USER=your_db_user
+POSTGRES_PASSWORD=your_db_password
+DB_HOST=db
+DB_PORT=5432
+
+SECRET_KEY=django-insecure-your-secret-key-here
+DEBUG=true
+ALLOWED_HOSTS=your-domain.com,localhost,127.0.0.1,gateway
+```
+
+> Не забудьте сгенерировать свой `SECRET_KEY` — можно через [Django Secret Key Generator](https://djecrety.ir/).
+
+### 3. Запустите проект
+
+```bash
+sudo docker compose -f docker-compose.production.yml up -d --build
+```
+
+### 4. Выполните миграции и соберите статику
+
+```bash
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+```
+
+### Для запуска автоматического деплоя:
+
+Запустите проект локально → проверьте, что всё работает → сделайте коммит → залейте в main
+
+```bash
+git add .
+git commit -m "Исправил баг"
+git push origin main
+```
+
+Это запустит автоматический деплой — и проект обновится на сервере.
+
+### 5. Создайте суперпользователя (если нужно)
+
+```bash
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser
+```
+
+### Автор:
+[Лилия Шангараева](https://github.com/LiliyaShangaraeva)
